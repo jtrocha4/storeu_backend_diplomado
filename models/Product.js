@@ -45,6 +45,12 @@ const productSchema = new Schema({
         type: Number,
         required: true,
         min: 0
+    },
+    estado: {
+        type: Number,
+        required: true,
+        enum: [0, 1],
+        default: 1
     }
 })
 
