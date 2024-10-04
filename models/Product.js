@@ -48,7 +48,7 @@ const productSchema = new Schema({
   },
   usuario: [{
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'User'
   }],
   estado: {
     type: Number,
