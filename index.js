@@ -12,8 +12,8 @@ app.use(express.static('public'))
 const productController = require('./controller/product')
 const userController = require('./controller/user')
 
-app.get('/', (req, res)=>{
-    res.send('<h1>Storeu-Api</h1>')
+app.get('/', (req, res) => {
+  res.send('<h1>Storeu-Api</h1>')
 })
 
 app.use('/', productController)
