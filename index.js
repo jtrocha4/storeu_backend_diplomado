@@ -11,6 +11,7 @@ app.use(express.static('public'))
 
 const productController = require('./controller/product')
 const userController = require('./controller/user')
+const loginController = require('./controller/login')
 
 app.get('/', (req, res) => {
   res.send('<h1>Storeu-Api</h1>')
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/', productController)
 app.use('/', userController)
+app.use('/api/login', loginController)
 
 const PORT = process.env.PORT || 3002
 app.listen(PORT)
