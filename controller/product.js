@@ -5,9 +5,11 @@ const router = express.Router()
 const { uploadImg } = require('../middleware/storage')
 
 const Product = require('../models/Product')
+const User = require('../models/User')
 
 router.get('/api/products', async (req, res) => {
   const data = await Product.find()
+    .populate('usuario')
   res.json(data)
 })
 
@@ -19,7 +21,9 @@ router.get('/api/products/:id', async (req, res) => {
 
 router.post('/api/product', uploadImg.single('imgUrl'), async (req, res) => {
   try {
-    const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad } = req.body
+    const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad, userId } = req.body
+
+    const user = await User.findById(userId)
 
     const data = new Product({
       nombre,
@@ -32,10 +36,13 @@ router.post('/api/product', uploadImg.single('imgUrl'), async (req, res) => {
       genero,
       temporada,
       precio,
-      cantidad
+      cantidad,
+      usuario: user._id
     })
 
     const createProduct = await data.save()
+    user.productos = user.productos.concat(data._id)
+    await user.save()
     res.status(201).json(createProduct)
   } catch (error) {
     console.error('Error al crear el producto:', error)
