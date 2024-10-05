@@ -36,4 +36,29 @@ router.post('/api/user', async (req, res) => {
   }
 })
 
+router.put('/api/user/:id', async (req, res) => {
+  try {
+    const id = req.params.id
+    const { nombreUsuario, nombre, apellido, correo, contrasena, productos, rol } = req.body
+
+    const saltRounds = 10
+    const hashContrasena = await bcrypt.hash(contrasena, saltRounds)
+
+    const data = {
+      nombreUsuario,
+      nombre,
+      apellido,
+      correo,
+      hashContrasena,
+      productos,
+      rol
+    }
+
+    const updateUser = await User.findByIdAndUpdate(id, data, { new: true })
+    res.status(200).json(updateUser)
+  } catch (error) {
+    res.status(500).json({ error: error.message })
+  }
+})
+
 module.exports = router
