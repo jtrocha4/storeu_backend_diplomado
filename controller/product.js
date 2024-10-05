@@ -15,10 +15,27 @@ router.get('/api/products', async (req, res) => {
   res.json(data)
 })
 
-router.get('/api/products/:id', async (req, res) => {
-  const { id } = req.params
-  const data = await Product.findById(id)
+router.get('/api/products/:tienda', async (req, res) => {
+  const { tienda } = req.params
+  const data = await Product.find()
+    .populate({
+      path: 'usuario',
+      match: { _id: tienda }
+    })
   res.json(data)
+})
+
+router.get('/api/products/:tienda/:id', async (req, res) => {
+  try {
+    const { tienda, id } = req.params
+    const data = await Product.find({
+      usuario: tienda,
+      _id: id
+    })
+    res.json(data)
+  } catch (error) {
+    res.json({ error })
+  }
 })
 
 router.post('/api/product', authorizationVerification, uploadImg.single('imgUrl'), async (req, res) => {
