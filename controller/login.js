@@ -31,7 +31,11 @@ router.post('/', async (req, res) => {
 
       const token = jwt.sign(
         userForToken,
-        process.env.SECRETKEY
+        process.env.SECRETKEY,
+        {
+          // Expira en 7 dias
+          expiresIn: 60 * 60 * 24 * 7
+        }
       )
 
       res.status(200).json({
