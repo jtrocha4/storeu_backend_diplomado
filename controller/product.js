@@ -3,7 +3,7 @@ require('../mongo')
 const express = require('express')
 const router = express.Router()
 
-const { uploadImg } = require('../middleware/storage')
+// const { uploadImg } = require('../middleware/storage')
 const authorizationVerification = require('../middleware/authorizationVerification')
 
 const Product = require('../models/Product')
@@ -38,9 +38,9 @@ router.get('/api/products/:tienda/:id', async (req, res) => {
   }
 })
 
-router.post('/api/product', authorizationVerification, uploadImg.single('imgUrl'), async (req, res) => {
+router.post('/api/product', authorizationVerification, async (req, res) => {
   try {
-    const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad } = req.body
+    const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad, imgUrl } = req.body
 
     const userId = req.userId
     const userRole = req.userRole
@@ -50,7 +50,7 @@ router.post('/api/product', authorizationVerification, uploadImg.single('imgUrl'
 
       const data = new Product({
         nombre,
-        imgUrl: '/uploads/' + req.file.filename,
+        imgUrl,
         descripcion,
         categoria,
         talla,
@@ -76,16 +76,16 @@ router.post('/api/product', authorizationVerification, uploadImg.single('imgUrl'
   }
 })
 
-router.put('/api/product/:id', authorizationVerification, uploadImg.single('imgUrl'), async (req, res) => {
+router.put('/api/product/:id', authorizationVerification, async (req, res) => {
   try {
     const id = req.params.id
     const userRole = req.userRole
 
     if (userRole === 'Administrador') {
-      const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad, estado } = req.body
+      const { nombre, descripcion, categoria, talla, color, fit, genero, temporada, precio, cantidad, imgUrl, estado } = req.body
       const data = {
         nombre,
-        imgUrl: '/uploads/' + req.file.filename || '',
+        imgUrl,
         descripcion,
         categoria,
         talla,
