@@ -30,7 +30,7 @@ const productSchema = new Schema({
   },
   genero: {
     type: String,
-    enum: ['Hombre', 'Mujer'],
+    enum: ['Hombre', 'Mujer', 'Unisex'],
     required: true
   },
   temporada: {
